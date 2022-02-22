@@ -1,26 +1,56 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import styled from 'styled-components';
 
 const Modal = (props) => {
-  const { open } = props;
+  const wrapperRef = useRef();
+  // 모달 상태관리
+  const [modalOpen, setModalOpen] = useState(false);
+  const openModal = () => {
+    setModalOpen(true);
+  };
+  const closeModal = (e) => {
+    if(wrapperRef.current === e.target) {
+      setModalOpen(false);
+    }
+  }
+  // 모달 영역 밖 클릭 시 모달 닫기
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  });
+  const handleClickOutside = (event) => {
+    if (wrapperRef && !wrapperRef.current.contains(event.target)) {
+      setModalOpen(false);
+      event.stopPropagation();
+    }
+  };
+
   return (
     <>
-      <ModalBox className={open ? "openModal modal" : "modal"}>
-        {open ? (
-          <ModalBackground>
-            <ModalContents>
-              하이
-            </ModalContents>
-          </ModalBackground>
-        ) : null}
-      </ModalBox>
+      <ModalBtn ref={wrapperRef} onClick={openModal}>
+        TEST-BTN
+      </ModalBtn>
+      {modalOpen ? (
+        <ModalBackground>
+          <ModalContents>
+            하이
+          </ModalContents>
+        </ModalBackground>
+      ) : null}
     </>
-  )
-}
+  );
+};
 
-const ModalBox = styled.div`
-  width: auto;
-  height: auto;
+const ModalBtn = styled.button`
+  width: 220px;
+  height: 50px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 15px;
+  background-color: #85f9cf;
 `;
 
 const ModalBackground = styled.div`
@@ -72,6 +102,5 @@ const ModalContents = styled.div`
     }
   }
 `;
-
 
 export default Modal;
