@@ -2,15 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 
 const ForestCard = (props) => {
-  const [forestName, address, phoneNumber] = [
-    '속리산숲체험휴양마을',
-    '충청북도 보은군 속리산면 속리산로 596',
-    '012-2334-1232',
-  ];
+  const { name, address, phoneNumber } = props.data;
 
   return (
     <Card>
-      <h3>{forestName}</h3>
+      <h3>{name}</h3>
       <div>📍 {address}</div>
       <div>📞 {phoneNumber}</div>
     </Card>
