@@ -4,7 +4,7 @@ import Modal from '../components/Modal';
 export default function List() {
   return (
     <>
-      <div>List</div>
+      <div>list</div>
       <Modal />
     </>
   );
