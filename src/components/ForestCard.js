@@ -23,12 +23,18 @@ const Card = styled.article`
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   display: flex;
+  justify-content: space-evenly;
   flex-direction: column;
-  padding-top: 20px;
-  padding-left: 17px;
+  padding: 20px 17px;
 
   h3 {
     font-size: 20px;
+    line-height: 22px;
+    margin-bottom: 8px;
+  }
+  div {
+    font-size: 16px;
+    line-height: 18px;
   }
 `;
 
