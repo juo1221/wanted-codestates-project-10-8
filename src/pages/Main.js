@@ -1,3 +1,4 @@
+
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import BackImg from '../asset/main_bg.png';
@@ -7,6 +8,7 @@ import {
   CompleteSavedMsg,
   MemoRequestMsg,
 } from '../components/Feedback';
+
 import ForestCard from '../components/ForestCard';
 
 const forestInfo = [
@@ -58,13 +60,12 @@ export default function Main() {
   const [myForestPlaces, setMyForestPlaces] = useState(forestInfo);
   const [filterName, setFilterName] = useState('이름');
   const [showFilterList, setFilterList] = useState(false);
-
   const [showFeedbackMemo, setShowFeedbackMemo] = useState(false);
   const [showFeedbackSave, setShowFeedbackSave] = useState(false);
   const [showFeedbackRemove, setShowFeedbackRemove] = useState(false);
 
-  const keyWordRef = useRef(null);
 
+  const keyWordRef = useRef(null);
   const FeedbackHandler = (setter) => {
     setter(true);
     setTimeout(() => {
@@ -96,6 +97,7 @@ export default function Main() {
             <span>{filterName}</span>
             <span>&#60;</span>
             <ul onClick={(e) => setFilterName(e.target.textContent)}>
+
               <li>이름</li>
               <li>메모</li>
             </ul>
@@ -115,6 +117,7 @@ export default function Main() {
                 <ForestCard key={place.id} placeInfo={place} />
               ))}
           </ul>
+
           <div>
             <button>&#43;</button>
           </div>
@@ -167,6 +170,7 @@ const MainPage = styled.main`
       color: white;
       box-shadow: 2px 2px 6px 0px gray;
 
+
       ul {
         display: flex;
         flex-direction: column;
@@ -177,13 +181,15 @@ const MainPage = styled.main`
         left: 0;
         width: 100%;
         max-height: ${({ showFilterList }) =>
-          showFilterList ? '200px' : '0px'};
+        showFilterList ? '200px' : '0px'};
         padding-left: 0;
         margin-top: 10px;
+
         border-radius: 15px;
         background: transparent;
         box-shadow: 2px 2px 6px 0px gray;
         list-style: none;
+
         transition: max-height 300ms ease-in;
         overflow: hidden;
       }
@@ -225,6 +231,7 @@ const MainPage = styled.main`
     align-items: center;
     flex: 1;
     margin-top: 70px;
+
 
     p {
       color: #ffffff;
