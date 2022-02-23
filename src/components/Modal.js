@@ -10,8 +10,6 @@ const Modal = ({
   setShowSaveMsg,
   setShowRemoveMsg,
 }) => {
-  console.log(data);
-  // const [modalOpen, setModalOpen] = useState(false);
   const isMain = window.location.pathname === '/';
   const [showExistMsg, setShowExistMsg] = useState(false);
   const [showMemo, setShowMemo] = useState(false);
@@ -38,7 +36,6 @@ const Modal = ({
   };
   const showMemoRequests = () => {
     if (showMemo) return;
-    console.log(inputValue, inputValue === undefined);
     if (!inputValue) {
       setShowMemo(true);
       setTimeout(() => {

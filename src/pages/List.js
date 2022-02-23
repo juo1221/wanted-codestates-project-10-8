@@ -41,7 +41,7 @@ export default function List({ setShowSaveMsg }) {
 
   useEffect(() => {
     loadData();
-  }, [loadData, page]);
+  }, [loadData]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const callback = ([entry]) => {
@@ -52,7 +52,7 @@ export default function List({ setShowSaveMsg }) {
     const observer = new IntersectionObserver(callback, options);
     observer.observe(targetRef.current);
     return () => observer.disconnect();
-  }, [callback, loadData, options]);
+  }, [callback, options]);
 
   const handleClick = () => {
     navigate('/');
