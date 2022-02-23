@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import Modal from '../components/Modal';
@@ -13,16 +14,19 @@ export default function List() {
     { id: 5, name: 'c', address: 'dd', phoneNumber: '001' },
     { id: 6, name: 'd', address: 'dd', phoneNumber: '001' },
   ];
+
   let navigate = useNavigate();
 
   const handleClick = () => {
     navigate('/');
   };
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectList, setSelectList] = useState({});
 
   // useEffect(() => {
   //   observer.current = new IntersectionObserver((entries, options));
   // });
-
+  console.log(selectList);
   return (
     <>
       {/* {isLoading && <Spinner />} */}
@@ -33,12 +37,17 @@ export default function List() {
       </ButtonWrapper>
       <CardListWrapper>
         {forestDataList.map((data) => (
-          <ForestCard key={data.id} placeInfo={data} />
+
+          <ForestCard
+            setSelectList={setSelectList}
+            setModalOpen={setModalOpen}
+            key={data.id}
+            placeInfo={data}
+          />
         ))}
       </CardListWrapper>
-      <div>List</div>
 
-      <Modal />
+      {modalOpen && <Modal setModalOpen={setModalOpen} data={selectList} />}
     </>
   );
 }
