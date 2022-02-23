@@ -41,7 +41,8 @@ const Modal = ({
   };
   const showMemoRequests = () => {
     if (showMemo) return;
-    if (inputValue.length === 0) {
+    console.log(inputValue, inputValue === undefined);
+    if (!inputValue) {
       setShowMemo(true);
       setTimeout(() => {
         setShowMemo(false);
@@ -50,7 +51,7 @@ const Modal = ({
   };
   const saveMyForest = () => {
     showMemoRequests();
-    if (inputValue.length > 0) {
+    if (!inputValue) {
       if (!myForestList.some((v) => v.fcNm === fcNm)) {
         const myForestArry = [
           ...myForestList,
@@ -241,7 +242,7 @@ const SaveButton = styled.button`
 `;
 
 const DeleteButton = styled.span`
-  width: 50%;
+  width: 48%;
   height: 45px;
   box-sizing: border-box;
   display: inline-block;
@@ -258,12 +259,13 @@ const DeleteButton = styled.span`
 `;
 
 const UpdateButton = styled.span`
-  width: 50%;
+  width: 48%;
   height: 45px;
   box-sizing: border-box;
   display: inline-block;
   color: #fff;
   margin-top: 20px;
+  margin-left: 4%;
   padding: 0 10px;
   background-color: #85f9cf;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
