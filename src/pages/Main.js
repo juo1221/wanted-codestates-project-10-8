@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Arrow } from '../asset/Arrow.svg';
-
+import { useNavigate } from 'react-router-dom';
 import {
   CompleteRemovedMsg,
   CompleteSavedMsg,
@@ -10,53 +10,9 @@ import {
 
 import ForestCard from '../components/ForestCard';
 
-const forestInfo = [
-  {
-    id: 1,
-    name: '충청도휴양마을',
-    address: '충청도',
-    memo: 'Test메모10',
-    phoneNumber: '012-2334-1232',
-  },
-  {
-    id: 2,
-    name: '전라도휴양마을',
-    address: '전라도',
-    memo: 'Test메모20',
-    phoneNumber: '012-2334-1232',
-  },
-  {
-    id: 3,
-    name: '강원도휴양마을',
-    address: '강원도',
-    memo: 'Test메모12',
-    phoneNumber: '012-2334-1232',
-  },
-  {
-    id: 4,
-    name: '경기도휴양마을',
-    address: '경기도',
-    memo: 'Test메모22',
-    phoneNumber: '012-2334-1232',
-  },
-  {
-    id: 5,
-    name: '경사도휴양마을',
-    address: '경상도',
-    memo: 'Test메모13',
-    phoneNumber: '012-2334-1232',
-  },
-  {
-    id: 6,
-    name: '제주도휴양마을',
-    address: '제주도',
-    memo: 'Test메모23',
-    phoneNumber: '012-2334-1232',
-  },
-];
-
-export default function Main() {
-  const [myForestPlaces, setMyForestPlaces] = useState(forestInfo);
+export default function Main({ showSaveMsg }) {
+  const [myForestPlaces, setMyForestPlaces] = useState('');
+  const [checkForest, setCheckForest] = useState([]);
   const [filterName, setFilterName] = useState('이름');
   const [showFilterList, setFilterList] = useState(false);
   const [showFeedbackMemo, setShowFeedbackMemo] = useState(false);
@@ -64,6 +20,16 @@ export default function Main() {
   const [showFeedbackRemove, setShowFeedbackRemove] = useState(false);
 
   const keyWordRef = useRef(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const test = JSON.parse(window.localStorage.getItem('myForest'));
+    if (test !== null) {
+      setCheckForest(test);
+      setMyForestPlaces(test);
+    }
+  }, []);
+
   const FeedbackHandler = (setter) => {
     setter(true);
     setTimeout(() => {
@@ -82,13 +48,16 @@ export default function Main() {
   const onChangeInput = () => {
     const keyword =
       filterName === '이름'
-        ? 'forestName'
+        ? 'fcNm'
         : filterName === '메모'
         ? 'memo'
-        : 'address';
-    const filteredForest = forestInfo.filter((item) =>
+        : 'fcAddr';
+
+    console.log(keyWordRef.current.value);
+    const filteredForest = checkForest.filter((item) =>
       item[keyword].includes(keyWordRef.current.value),
     );
+    console.log(filteredForest);
     setMyForestPlaces(filteredForest);
   };
 
@@ -118,13 +87,13 @@ export default function Main() {
           {!myForestPlaces && <p>저장된 목록이 없습니다</p>}
           <ul>
             {myForestPlaces &&
-              myForestPlaces.map((place) => (
-                <ForestCard key={place.id} dataObj={place} />
+              myForestPlaces.map((place, i) => (
+                <ForestCard key={i} dataObj={place} />
               ))}
           </ul>
 
           <div>
-            <button>&#43;</button>
+            <button onClick={() => navigate('/list')}>&#43;</button>
           </div>
         </div>
       </MainPage>
@@ -141,6 +110,8 @@ export default function Main() {
       {showFeedbackSave && <CompleteSavedMsg />}
       {showFeedbackRemove && <CompleteRemovedMsg />} */}
     </MainContainer>
+      {showSaveMsg && <CompleteSavedMsg />}
+    </>
   );
 }
 
@@ -199,14 +170,13 @@ const MainPage = styled.main`
           showFilterList ? '200px' : '0px'};
         padding-left: 0;
         margin-top: 10px;
-
         border-radius: 15px;
         background: rgba(255, 255, 255);
         box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
         list-style: none;
-
         transition: max-height 300ms ease-in;
         overflow: hidden;
+        z-index: 10;
       }
 
       li {
@@ -243,6 +213,7 @@ const MainPage = styled.main`
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
     flex: 1;
     margin-top: 40px;
 
@@ -253,6 +224,9 @@ const MainPage = styled.main`
     }
 
     button {
+      position: fixed;
+      bottom: 10px;
+      right: 20px;
       width: 52px;
       height: 52px;
       line-height: 52px;
@@ -268,16 +242,5 @@ const MainPage = styled.main`
     & > ul > article {
       margin-bottom: 45px;
     }
-  }
-`;
-
-const ButtonStyle = styled.button`
-  border: 1px solid black;
-  padding: 20px;
-  :hover {
-    color: red;
-  }
-  :active {
-    opacity: 0.6;
   }
 `;

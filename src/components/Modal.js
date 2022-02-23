@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { MemoRequestMsg } from './Feedback';
 
-const Modal = ({ data, setModalOpen }) => {
+const Modal = ({ data, setModalOpen, setShowSaveMsg }) => {
   // const [modalOpen, setModalOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [showMemo, setShowMemo] = useState(false);
   const { name, address, phoneNumber } = data;
   const [myForestList, setMyForestList] = useState([]);
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     const test = JSON.parse(window.localStorage.getItem('myForest'));
     if (test !== null) {
@@ -34,9 +38,9 @@ const Modal = ({ data, setModalOpen }) => {
     const myForestArry = [
       ...myForestList,
       {
-        name,
-        address,
-        phoneNumber,
+        fcNm: name,
+        fcAddr: address,
+        ref1: phoneNumber,
         memo: inputValue,
       },
     ];
@@ -47,6 +51,8 @@ const Modal = ({ data, setModalOpen }) => {
     if (inputValue.length > 0) {
       saveMyForest();
       setModalOpen(false);
+      navigate('/');
+      setShowSaveMsg(true);
     }
   };
 
