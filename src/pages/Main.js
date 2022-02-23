@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import BackImg from '../asset/main_bg.png';
 import { useNavigate } from 'react-router-dom';
-
 import {
   CompleteRemovedMsg,
   CompleteSavedMsg,
@@ -11,7 +10,7 @@ import {
 
 import ForestCard from '../components/ForestCard';
 
-export default function Main() {
+export default function Main({ showSaveMsg }) {
   const [myForestPlaces, setMyForestPlaces] = useState('');
   const [checkForest, setCheckForest] = useState([]);
   const [filterName, setFilterName] = useState('이름');
@@ -96,6 +95,7 @@ export default function Main() {
           </div>
         </div>
       </MainPage>
+      {showSaveMsg && <CompleteSavedMsg />}
     </>
   );
 }

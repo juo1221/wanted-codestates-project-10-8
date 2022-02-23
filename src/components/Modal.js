@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { MemoRequestMsg } from './Feedback';
 
-const Modal = ({ data, setModalOpen }) => {
+const Modal = ({ data, setModalOpen, setShowSaveMsg }) => {
   // const [modalOpen, setModalOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [showMemo, setShowMemo] = useState(false);
@@ -52,6 +52,7 @@ const Modal = ({ data, setModalOpen }) => {
       saveMyForest();
       setModalOpen(false);
       navigate('/');
+      setShowSaveMsg(true);
     }
   };
 
