@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 export function MemoRequestMsg() {
@@ -15,6 +16,27 @@ export function MemoRequestMsg() {
 }
 
 export function CompleteSavedMsg() {
+  const [opacity, setOpacity] = useState(1);
+  console.log('시작전');
+
+  let animation;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  function softRemover() {
+    setOpacity(opacity - 0.05);
+    animation = requestAnimationFrame(softRemover);
+
+    if (opacity < 0.01) {
+      cancelAnimationFrame(animation);
+    }
+  }
+  console.log('도/돼나?');
+
+  console.log(opacity);
+  useEffect(() => {
+    softRemover();
+  }, [softRemover]);
+
+  window.addEventListener('click', () => console.log('click'));
   return (
     <FeedbackContainerStyle //
       height={'60px'}
@@ -22,6 +44,7 @@ export function CompleteSavedMsg() {
       fontSize={'18px'}
       backgroundColor={'#85F9CF '}
       top={'13%'}
+      opacity={opacity}
     >
       저장이 완료되었습니다.
     </FeedbackContainerStyle>
@@ -50,6 +73,7 @@ export const FeedbackContainerStyle = styled.div`
   font-size: ${(props) => props.fontSize || '16px'};
   top: ${(props) => props.top || '50%'};
   left: ${(props) => props.left || '50%'};
+  opacity: ${(props) => props.opacity || 0.5};
   transform: translateX(-50%) translateY(-50%);
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
   font-weight: 700;
