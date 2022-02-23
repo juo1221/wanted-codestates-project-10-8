@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const ForestCard = (props) => {
-  const { name, address, phoneNumber } = props.data;
+  const { name, address, phoneNumber } = props.placeInfo;
 
   return (
     <Card>

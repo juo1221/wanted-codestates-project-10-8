@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import Modal from '../components/Modal';
 import ForestCard from '../components/ForestCard';
@@ -12,6 +13,12 @@ export default function List() {
     { id: 5, name: 'c', address: 'dd', phoneNumber: '001' },
     { id: 6, name: 'd', address: 'dd', phoneNumber: '001' },
   ];
+  let navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/');
+  };
+
   // useEffect(() => {
   //   observer.current = new IntersectionObserver((entries, options));
   // });
@@ -20,16 +27,17 @@ export default function List() {
     <>
       {/* {isLoading && <Spinner />} */}
       <ButtonWrapper>
-        <ReturnButton>
+        <ReturnButton onClick={handleClick}>
           <span>메인으로</span>
         </ReturnButton>
       </ButtonWrapper>
       <CardListWrapper>
         {forestDataList.map((data) => (
-          <ForestCard key={data.id} data={data} />
+          <ForestCard key={data.id} placeInfo={data} />
         ))}
       </CardListWrapper>
       <div>List</div>
+
       <Modal />
     </>
   );
