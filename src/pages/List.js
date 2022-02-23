@@ -18,8 +18,6 @@ export default function List() {
 
   return (
     <>
-
-     
       {/* {isLoading && <Spinner />} */}
       <ButtonWrapper>
         <ReturnButton>
@@ -28,7 +26,7 @@ export default function List() {
       </ButtonWrapper>
       <CardListWrapper>
         {forestDataList.map((data) => (
-          <ForestCard key={data.id} data={data} />
+          <ForestCard key={data.id} placeInfo={data} />
         ))}
       </CardListWrapper>
       <div>List</div>
