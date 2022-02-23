@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Modal from '../components/Modal';
 import ForestCard from '../components/ForestCard';
@@ -12,10 +12,13 @@ export default function List() {
     { id: 5, name: 'c', address: 'dd', phoneNumber: '001' },
     { id: 6, name: 'd', address: 'dd', phoneNumber: '001' },
   ];
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectList, setSelectList] = useState({});
+
   // useEffect(() => {
   //   observer.current = new IntersectionObserver((entries, options));
   // });
-
+  console.log(selectList);
   return (
     <>
       {/* {isLoading && <Spinner />} */}
@@ -26,12 +29,16 @@ export default function List() {
       </ButtonWrapper>
       <CardListWrapper>
         {forestDataList.map((data) => (
-          <ForestCard key={data.id} placeInfo={data} />
+          <ForestCard
+            setSelectList={setSelectList}
+            setModalOpen={setModalOpen}
+            key={data.id}
+            placeInfo={data}
+          />
         ))}
       </CardListWrapper>
-      <div>List</div>
 
-      <Modal />
+      {modalOpen && <Modal setModalOpen={setModalOpen} data={selectList} />}
     </>
   );
 }

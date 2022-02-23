@@ -112,5 +112,6 @@ export const FeedbackContainerStyle = styled.div`
   font-weight: 700;
   border-radius: 15px;
   text-align: center;
-  position: absolute;
+  position: fixed;
+  z-index: 9;
 `;
