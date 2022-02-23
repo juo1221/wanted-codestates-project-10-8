@@ -1,16 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const ForestCard = (props) => {
-  const { name, address, phoneNumber } = props.placeInfo;
+const ForestCard = React.forwardRef(({ dataObj }, ref) => {
+  const { fcNm: name, fcAddr: address, ref1: phoneNumber } = dataObj;
   return (
-    <Card>
+    <Card ref={ref}>
       <h3>{name}</h3>
       <div>📍 {address}</div>
       <div>📞 {phoneNumber}</div>
     </Card>
   );
-};
+});
 
 const Card = styled.article`
   width: 362px;
