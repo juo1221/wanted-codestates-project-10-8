@@ -1,47 +1,87 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { MemoRequestMsg } from './Feedback';
 
-const Modal = (props) => {
-  // 모달 상태관리
-  const [modalOpen, setModalOpen] = useState(false);
-  // 오픈 모달
+const Modal = ({ data, setModalOpen }) => {
+  // const [modalOpen, setModalOpen] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const [showMemo, setShowMemo] = useState(false);
+  const { name, address, phoneNumber } = data;
+  const [myForestList, setMyForestList] = useState([]);
+  useEffect(() => {
+    const test = JSON.parse(window.localStorage.getItem('myForest'));
+    if (test !== null) {
+      setMyForestList(test);
+    }
+  }, []);
+  console.log(myForestList);
   const openModal = () => {
-    setModalOpen(true);
+    // setModalOpen(true);
   };
-  // 모달 영역 밖 클릭 시 모달 닫기
   const closeModal = () => {
     setModalOpen(false);
+  };
+  const showMemoRequests = () => {
+    if (showMemo) return;
+    if (inputValue.length === 0) {
+      setShowMemo(true);
+      setTimeout(() => {
+        setShowMemo(false);
+      }, 1000);
+    }
+  };
+  const saveMyForest = () => {
+    const myForestArry = [
+      ...myForestList,
+      {
+        name,
+        address,
+        phoneNumber,
+        memo: inputValue,
+      },
+    ];
+    window.localStorage.setItem('myForest', JSON.stringify(myForestArry));
+  };
+  const inputHandler = () => {
+    showMemoRequests();
+    if (inputValue.length > 0) {
+      saveMyForest();
+      setModalOpen(false);
+    }
   };
 
   return (
     <>
+      {showMemo && <MemoRequestMsg />}
       <ModalBox>
         <ModalBtn onClick={openModal}>ModalTest-BTN</ModalBtn>
-        {modalOpen ? (
-          <>
-            <ModalContents>
-              <Box>
-                <p className='BoxText'>이름</p>
-                <p className='BoxData'>속리산숲체험휴양마을</p>
-              </Box>
-              <Box>
-                <p className='BoxText'>주소</p>
-                <p className='BoxData'>충청북도 보운군 속리산</p>
-              </Box>
-              <Box>
-                <p className='BoxText'>연락처</p>
-                <p className='BoxData'>043-540-3220</p>
-              </Box>
-              <BoxTwo>
-                <p className='BoxText'>메모</p>
-                <MemoInput />
-                <SaveButton>저장</SaveButton>
-                <DeleteButton>삭제</DeleteButton>
-              </BoxTwo>
-            </ModalContents>
-            <ModalBackground onClick={closeModal} />
-          </>
-        ) : null}
+        <>
+          <ModalContents>
+            <Box>
+              <p className="BoxText">이름</p>
+              <p className="BoxData">{name}</p>
+            </Box>
+            <Box>
+              <p className="BoxText">주소</p>
+              <p className="BoxData">{address}</p>
+            </Box>
+            <Box>
+              <p className="BoxText">연락처</p>
+              <p className="BoxData">{phoneNumber}</p>
+            </Box>
+            <BoxTwo>
+              <p className="BoxText">메모</p>
+              <MemoInput
+                value={inputValue}
+                onChange={(event) => {
+                  setInputValue(event.target.value);
+                }}
+              />
+              <SaveButton onClick={inputHandler}>저장</SaveButton>
+            </BoxTwo>
+          </ModalContents>
+          <ModalBackground onClick={closeModal} />
+        </>
       </ModalBox>
     </>
   );
@@ -65,7 +105,7 @@ const ModalBtn = styled.button`
 const ModalContents = styled.div`
   width: 75%;
   height: auto;
-  padding: 15% 8%;
+  padding: 10% 8%;
   overflow: hidden;
   background-color: #fff;
   border-radius: 15px;
@@ -107,21 +147,21 @@ const Box = styled.div`
     font-weight: bold;
     margin-top: 15px;
   }
-`
+`;
 
 const BoxTwo = styled(Box)`
   margin-top: 30px;
-`
+`;
 
 const MemoInput = styled.input`
   width: 100%;
   height: 45px;
   margin-top: 15px;
   padding: 0 10px;
-  border: 1px solid #EFEFEF;
+  border: 1px solid #efefef;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
-`
+`;
 
 const SaveButton = styled.button`
   width: 100%;
@@ -129,16 +169,12 @@ const SaveButton = styled.button`
   color: #fff;
   margin-top: 20px;
   padding: 0 10px;
-  background-color: #85F9CF;
+  background-color: #85f9cf;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
   font-weight: bold;
   font-size: 16px;
-`
-
-const DeleteButton = styled(SaveButton)`
-  background-color: #FF6B6B;
-`
+`;
 
 const ModalBackground = styled.div`
   width: 100%;

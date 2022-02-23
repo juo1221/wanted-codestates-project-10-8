@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+
 const ForestCard = React.forwardRef(({ dataObj }, ref) => {
   const { fcNm: name, fcAddr: address, ref1: phoneNumber } = dataObj;
   return (
@@ -9,6 +10,11 @@ const ForestCard = React.forwardRef(({ dataObj }, ref) => {
       <div>📍 {address}</div>
       <div>📞 {phoneNumber}</div>
     </Card>
+  const { setSelectList, setModalOpen } = props;
+  const clickHandler = () => {
+    setSelectList(props.placeInfo);
+    setModalOpen(true);
+  };
   );
 });
 
