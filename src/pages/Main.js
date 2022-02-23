@@ -10,12 +10,15 @@ import {
 } from '../components/Feedback';
 
 import ForestCard from '../components/ForestCard';
+import Modal from '../components/Modal';
 
 export default function Main() {
   const [myForestPlaces, setMyForestPlaces] = useState('');
   const [checkForest, setCheckForest] = useState([]);
   const [filterName, setFilterName] = useState('이름');
   const [showFilterList, setFilterList] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectList, setSelectList] = useState({});
   const [showFeedbackMemo, setShowFeedbackMemo] = useState(false);
   const [showFeedbackSave, setShowFeedbackSave] = useState(false);
   const [showFeedbackRemove, setShowFeedbackRemove] = useState(false);
@@ -87,10 +90,18 @@ export default function Main() {
           <ul>
             {myForestPlaces &&
               myForestPlaces.map((place, i) => (
-                <ForestCard key={i} dataObj={place} />
+                <>
+                  <ForestCard
+                    setModalOpen={setModalOpen}
+                    key={i}
+                    dataObj={place}
+                  />
+                  {modalOpen && (
+                    <Modal setModalOpen={setModalOpen} data={place} />
+                  )}
+                </>
               ))}
           </ul>
-
           <div>
             <button onClick={() => navigate('/list')}>&#43;</button>
           </div>
@@ -193,7 +204,7 @@ const MainPage = styled.main`
     margin-top: 70px;
 
     p {
-      color: #ffffff;
+      /* color: #ffffff; */
       font-size: 22px;
       font-weight: 600;
     }
