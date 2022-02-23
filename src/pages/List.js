@@ -80,24 +80,39 @@ export default function List({ setShowSaveMsg }) {
   });
 
   return (
-    <>
-      {isLoading && <Spinner />}
-      <ButtonWrapper>
-        <ReturnButton onClick={handleClick}>
-          <span>메인으로</span>
-        </ReturnButton>
-      </ButtonWrapper>
-      <CardListWrapper>{cardList}</CardListWrapper>
-      {modalOpen && (
-        <Modal
-          setModalOpen={setModalOpen}
-          data={selectList}
-          setShowSaveMsg={setShowSaveMsg}
-        />
-      )}
-    </>
+    <ListContainer>
+      <ListPage>
+        {isLoading && <Spinner />}
+        <ButtonWrapper>
+          <ReturnButton onClick={handleClick}>
+            <span>메인으로</span>
+          </ReturnButton>
+        </ButtonWrapper>
+        <CardListWrapper>{cardList}</CardListWrapper>
+        {modalOpen && <Modal setModalOpen={setModalOpen} data={selectList} setShowSaveMsg={setShowSaveMsg} />}
+      </ListPage>
+    </ListContainer>
   );
 }
+
+const ListContainer = styled.div`
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #efefef;
+`;
+
+const ListPage = styled(ListContainer)`
+  width: 390px;
+  height: 844px;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+`;
 
 const ButtonWrapper = styled.section`
   width: 362px;
@@ -111,17 +126,18 @@ const ReturnButton = styled.button`
   &:before {
     content: '<';
   }
-  width: 65px;
+  width: 70px;
   height: 40px;
   display: flex;
   align-items: center;
   font-size: 18px;
   font-weight: 700;
-  color: #e5e5e5;
+  color: #ccc;
   cursor: pointer;
+  margin-top: 20px;
 
   span {
-    font-size: 14px;
+    font-size: 16px;
     margin-left: 4px;
   }
 `;
@@ -136,6 +152,6 @@ const CardListWrapper = styled.section`
   // justify-content: space-around;
 
   & > article {
-    margin: 10px 0;
+    margin-bottom: 45px;
   }
 `;

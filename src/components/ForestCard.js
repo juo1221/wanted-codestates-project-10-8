@@ -11,9 +11,9 @@ const ForestCard = React.forwardRef(
     return (
       <Card ref={ref} onClick={clickHandler}>
         <h3>{name}</h3>
-        <div>📍 {address}</div>
-        <div>📞 {phoneNumber}</div>
-        <div>{memo && memo}</div>
+        <div className="forest-data">📍 {address}</div>
+        <div className="forest-data">📞 {phoneNumber}</div>
+        <div className="forest-data">{memo && memo}</div>
       </Card>
     );
   },
@@ -21,24 +21,31 @@ const ForestCard = React.forwardRef(
 
 const Card = styled.article`
   width: 362px;
-  height: 135px;
+  height: auto;
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   flex-direction: column;
-  padding: 20px 17px;
-  background: rgba(203, 206, 205, 0.5);
+  padding: 30px 17px;
+  background: rgba(255, 255, 255, 0.2);
 
   margin-top: 10px;
   h3 {
     font-size: 20px;
+    font-weight: bold;
     line-height: 22px;
-    margin-bottom: 8px;
+    margin-bottom: 20px;
   }
   div {
     font-size: 16px;
     line-height: 18px;
+  }
+  .forest-data {
+    margin-bottom: 20px;
+  }
+  .forest-data:last-child {
+    margin: 0;
   }
 `;
 export default ForestCard;
