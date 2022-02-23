@@ -15,6 +15,11 @@ export default function List() {
   return (
     <>
       {/* {isLoading && <Spinner />} */}
+      <ButtonWrapper>
+        <ReturnButton>
+          <span>메인으로</span>
+        </ReturnButton>
+      </ButtonWrapper>
       <CardListWrapper>
         {forestDataList.map((data) => (
           <ForestCard key={data.id} data={data} />
@@ -25,6 +30,33 @@ export default function List() {
     </>
   );
 }
+
+const ButtonWrapper = styled.section`
+  width: 362px;
+  height: 75px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+`;
+
+const ReturnButton = styled.button`
+  &:before {
+    content: '<';
+  }
+  width: 65px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #e5e5e5;
+  cursor: pointer;
+
+  span {
+    font-size: 14px;
+    margin-left: 4px;
+  }
+`;
 
 const CardListWrapper = styled.section`
   width: 100%;
