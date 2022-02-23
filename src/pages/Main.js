@@ -117,7 +117,7 @@ export default function Main() {
           <ul>
             {myForestPlaces &&
               myForestPlaces.map((place) => (
-                <ForestCard key={place.id} placeInfo={place} />
+                <ForestCard key={place.id} dataObj={place} />
               ))}
           </ul>
 

@@ -1,17 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const ForestCard = (props) => {
-  const { name, address, phoneNumber, memo } = props.placeInfo;
-  return (
-    <Card>
-      <h3>{name}</h3>
-      <div>📍 {address}</div>
-      <div>📞 {phoneNumber}</div>
-      <div>{memo && memo}</div>
-    </Card>
-  );
-};
+const ForestCard = React.forwardRef(
+  ({ dataObj, setModalOpen, setSelectList }, ref) => {
+    const { fcNm: name, fcAddr: address, ref1: phoneNumber, memo } = dataObj;
+    const clickHandler = () => {
+      setModalOpen(true);
+      setSelectList({ name, address, phoneNumber });
+    };
+    return (
+      <Card ref={ref} onClick={clickHandler}>
+        <h3>{name}</h3>
+        <div>📍 {address}</div>
+        <div>📞 {phoneNumber}</div>
+        <div>{memo && memo}</div>
+      </Card>
+    );
+  },
+);
 
 const Card = styled.article`
   width: 362px;
@@ -33,5 +39,4 @@ const Card = styled.article`
     line-height: 18px;
   }
 `;
-
 export default ForestCard;
