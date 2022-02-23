@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { MemoExistMsg, MemoRequestMsg } from './Feedback';
@@ -10,7 +10,6 @@ const Modal = ({
   setShowSaveMsg,
   setShowRemoveMsg,
 }) => {
-  console.log(data);
   // const [modalOpen, setModalOpen] = useState(false);
   const isMain = window.location.pathname === '/';
   const [showExistMsg, setShowExistMsg] = useState(false);
@@ -19,10 +18,13 @@ const Modal = ({
   const [inputValue, setInputValue] = useState(memo);
   const [myForestList, setMyForestList] = useState([]);
 
+  const inputValueRef = useRef(null);
+  let timeoutRef = useRef('');
+
   const navigate = useNavigate();
   const FeedbackHandler = (setter) => {
     setter(true);
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setter(false);
     }, 1000);
   };
@@ -33,6 +35,7 @@ const Modal = ({
       setMyForestList(test);
     }
   }, []);
+
   const openModal = () => {
     // setModalOpen(true);
   };
@@ -41,35 +44,40 @@ const Modal = ({
   };
   const showMemoRequests = () => {
     if (showMemo) return;
-    if (inputValue.length === 0) {
-      setShowMemo(true);
-      setTimeout(() => {
-        setShowMemo(false);
-      }, 1000);
-    }
+    console.log(inputValue, inputValue === undefined);
+    // setShowMemo(true);
+    // setTimeout(() => {
+    //   setShowMemo(false);
+    // }, 1000);
   };
   const saveMyForest = () => {
-    showMemoRequests();
-    if (inputValue.length > 0) {
-      if (!myForestList.some((v) => v.fcNm === fcNm)) {
-        const myForestArry = [
-          ...myForestList,
-          {
-            fcNm: fcNm,
-            fcAddr: fcAddr,
-            ref1: ref1,
-            memo: inputValue,
-          },
-        ];
-        window.localStorage.setItem('myForest', JSON.stringify(myForestArry));
-        setModalOpen(false);
-        navigate('/');
-        setShowSaveMsg(true);
-      } else {
-        setShowExistMsg(true);
-        FeedbackHandler(setShowExistMsg);
-      }
+    // showMemoRequests();
+    if (!inputValueRef.current.value) {
+      setShowMemo(true);
+      FeedbackHandler(setShowMemo);
+      clearTimeout(timeoutRef.current);
+      return;
     }
+    if (myForestList.some((v) => v.fcNm === fcNm)) {
+      setShowExistMsg(true);
+      FeedbackHandler(setShowExistMsg);
+      clearTimeout(timeoutRef.current);
+      return;
+    }
+    const myForestArry = [
+      ...myForestList,
+      {
+        id: Date.now(),
+        fcNm,
+        fcAddr,
+        ref1,
+        memo: inputValue,
+      },
+    ];
+    window.localStorage.setItem('myForest', JSON.stringify(myForestArry));
+    setModalOpen(false);
+    navigate('/');
+    setShowSaveMsg(true);
   };
 
   // const inputHandler = () => {
@@ -109,9 +117,7 @@ const Modal = ({
 
   return (
     <>
-      {showMemo && <MemoRequestMsg />}
       <ModalBox>
-        <ModalBtn onClick={openModal}>ModalTest-BTN</ModalBtn>
         <>
           <ModalContents>
             <Box>
@@ -129,10 +135,9 @@ const Modal = ({
             <BoxTwo>
               <p className="BoxText">메모</p>
               <MemoInput
-                value={inputValue}
-                onChange={(event) => {
-                  setInputValue(event.target.value);
-                }}
+                ref={inputValueRef}
+                value={inputValue || ''}
+                onChange={(event) => setInputValue(event.target.value)}
               />
               {isMain && (
                 <>
@@ -147,6 +152,7 @@ const Modal = ({
         </>
       </ModalBox>
       {showExistMsg && <MemoExistMsg />}
+      {showMemo && <MemoRequestMsg />}
     </>
   );
 };
@@ -241,7 +247,7 @@ const SaveButton = styled.button`
 `;
 
 const DeleteButton = styled.span`
-  width: 50%;
+  width: 48%;
   height: 45px;
   box-sizing: border-box;
   display: inline-block;
@@ -258,12 +264,13 @@ const DeleteButton = styled.span`
 `;
 
 const UpdateButton = styled.span`
-  width: 50%;
+  width: 48%;
   height: 45px;
   box-sizing: border-box;
   display: inline-block;
   color: #fff;
   margin-top: 20px;
+  margin-left: 4%;
   padding: 0 10px;
   background-color: #85f9cf;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);

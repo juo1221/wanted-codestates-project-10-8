@@ -59,68 +59,55 @@ export default function Main({ showSaveMsg }) {
   };
 
   return (
-    <MainContainer>
-      <MainPage showFilterList={showFilterList}>
-        <div className="main_filter">
-          <div className="filter" onClick={showFilterHandler}>
-            <span>{filterName}</span>
-            <span>
-              <Arrow fill="#333" width="12" />
-            </span>
-            <ul onClick={(e) => setFilterName(e.target.textContent)}>
-              <li>이름</li>
-              <li>주소</li>
-              <li>메모</li>
-            </ul>
+    <>
+      <MainContainer>
+        <MainPage showFilterList={showFilterList}>
+          <div className="main_filter">
+            <div className="filter" onClick={showFilterHandler}>
+              <span>{filterName}</span>
+              <span>
+                <Arrow fill="#333" width="12" />
+              </span>
+              <ul onClick={(e) => setFilterName(e.target.textContent)}>
+                <li>이름</li>
+                <li>주소</li>
+                <li>메모</li>
+              </ul>
+            </div>
+            <input
+              type="text"
+              ref={keyWordRef}
+              placeholder="검색어를 입력해주세요"
+              onChange={onChangeInput}
+            />
           </div>
-          <input
-            type="text"
-            ref={keyWordRef}
-            placeholder="검색어를 입력해주세요"
-            onChange={onChangeInput}
-          />
-        </div>
-        <div className="main_list">
-          {!myForestPlaces && <p>저장된 목록이 없습니다</p>}
-          <ul>
-            {myForestPlaces &&
-              myForestPlaces.map((place, i) => (
-                <>
+          <div className="main_list">
+            {!myForestPlaces && <p>저장된 목록이 없습니다</p>}
+            <ul>
+              {myForestPlaces &&
+                myForestPlaces.map((place, i) => (
                   <ForestCard
+                    key={place.id}
                     setSelectList={setSelectList}
                     setModalOpen={setModalOpen}
-                    key={i}
                     dataObj={place}
                   />
-                  {modalOpen && (
-                    <Modal
-                      setModalOpen={setModalOpen}
-                      data={selectList}
-                      setMyForestPlaces={setMyForestPlaces}
-                      setShowRemoveMsg={setShowRemoveMsg}
-                    />
-                  )}
-                </>
-              ))}
-          </ul>
-          <div>
-            <button onClick={() => navigate('/list')}>&#43;</button>
+                ))}
+            </ul>
+            {modalOpen && (
+              <Modal
+                setModalOpen={setModalOpen}
+                data={selectList}
+                setMyForestPlaces={setMyForestPlaces}
+                setShowRemoveMsg={setShowRemoveMsg}
+              />
+            )}
+            <div>
+              <button onClick={() => navigate('/list')}>&#43;</button>
+            </div>
           </div>
-        </div>
-      </MainPage>
-      {/* <ButtonStyle onClick={() => FeedbackHandler(setShowFeedbackMemo)}>
-        memo
-      </ButtonStyle>
-      <ButtonStyle onClick={() => FeedbackHandler(setShowFeedbackSave)}>
-        save
-      </ButtonStyle>
-      <ButtonStyle onClick={() => FeedbackHandler(setShowFeedbackRemove)}>
-        remove
-      </ButtonStyle>
-      {showFeedbackMemo && <MemoRequestMsg />}
-      {showFeedbackSave && <CompleteSavedMsg />}
-      {showFeedbackRemove && <CompleteRemovedMsg />} */}
-    </MainContainer>
+        </MainPage>
+      </MainContainer>
       {showSaveMsg && <CompleteSavedMsg />}
       {showRemoveMsg && <CompleteRemovedMsg />}
     </>
@@ -237,8 +224,8 @@ const MainPage = styled.main`
 
     button {
       position: fixed;
-      bottom: 10px;
-      right: 20px;
+      bottom: 20px;
+      right: 30px;
       width: 52px;
       height: 52px;
       line-height: 52px;
@@ -250,6 +237,13 @@ const MainPage = styled.main`
       font-weight: 600;
       font-size: 50px;
       cursor: pointer;
+      bottom: 1%;
+      left: 50%;
+      opacity: 100%;
+      transform: translateX(-50%) translateY(-50%);
+      @media screen and (max-width: 500px) {
+        bottom: 1%;
+      }
     }
     & > ul > article {
       margin-bottom: 45px;

@@ -17,6 +17,7 @@ export default function List({ setShowSaveMsg }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectList, setSelectList] = useState({});
   const idSet = new Set();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const options = {
     root: null,
     rootMargin: '0px',
@@ -36,21 +37,23 @@ export default function List({ setShowSaveMsg }) {
     } finally {
       setIsLoading(false);
     }
-  }, [isLoading]);
+  }, [page]);
 
   useEffect(() => {
     loadData();
-  }, [page]);
+  }, [loadData, page]);
 
-  const callback = ([entry], observer) => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const callback = ([entry]) => {
     if (entry.isIntersecting) setPage(page + 1);
   };
+
   useEffect(() => {
     if (!targetRef.current) return;
     const observer = new IntersectionObserver(callback, options);
     observer.observe(targetRef.current);
     return () => observer.disconnect();
-  }, [loadData]);
+  }, [callback, options]);
 
   const handleClick = () => {
     navigate('/');
@@ -90,7 +93,13 @@ export default function List({ setShowSaveMsg }) {
           </ReturnButton>
         </ButtonWrapper>
         <CardListWrapper>{cardList}</CardListWrapper>
-        {modalOpen && <Modal setModalOpen={setModalOpen} data={selectList} setShowSaveMsg={setShowSaveMsg} />}
+        {modalOpen && (
+          <Modal
+            setModalOpen={setModalOpen}
+            data={selectList}
+            setShowSaveMsg={setShowSaveMsg}
+          />
+        )}
       </ListPage>
     </ListContainer>
   );
