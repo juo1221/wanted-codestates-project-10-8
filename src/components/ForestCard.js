@@ -28,7 +28,9 @@ const Card = styled.article`
   justify-content: space-evenly;
   flex-direction: column;
   padding: 20px 17px;
+  background: rgba(203, 206, 205, 0.5);
 
+  margin-top: 10px;
   h3 {
     font-size: 20px;
     line-height: 22px;
