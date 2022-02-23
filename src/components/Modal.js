@@ -1,18 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { MemoRequestMsg } from './Feedback';
+import { MemoExistMsg, MemoRequestMsg } from './Feedback';
 
-const Modal = ({ data, setModalOpen }) => {
+const Modal = ({
+  data,
+  setModalOpen,
+  setMyForestPlaces,
+  setShowSaveMsg,
+  setShowRemoveMsg,
+}) => {
   console.log(data);
   // const [modalOpen, setModalOpen] = useState(false);
   const isMain = window.location.pathname === '/';
+  const [showExistMsg, setShowExistMsg] = useState(false);
   const [showMemo, setShowMemo] = useState(false);
   const { fcNm, fcAddr, ref1, memo } = data;
   const [inputValue, setInputValue] = useState(memo);
   const [myForestList, setMyForestList] = useState([]);
 
   const navigate = useNavigate();
+  const FeedbackHandler = (setter) => {
+    setter(true);
+    setTimeout(() => {
+      setter(false);
+    }, 1000);
+  };
 
   useEffect(() => {
     const test = JSON.parse(window.localStorage.getItem('myForest'));
@@ -20,7 +33,6 @@ const Modal = ({ data, setModalOpen }) => {
       setMyForestList(test);
     }
   }, []);
-  console.log(myForestList);
   const openModal = () => {
     // setModalOpen(true);
   };
@@ -37,43 +49,62 @@ const Modal = ({ data, setModalOpen }) => {
     }
   };
   const saveMyForest = () => {
-    const myForestArry = [
-      ...myForestList,
-      {
-        fcNm: fcNm,
-        fcAddr: fcAddr,
-        ref1: ref1,
-        memo: inputValue,
-      },
-    ];
-    window.localStorage.setItem('myForest', JSON.stringify(myForestArry));
-  };
-  const inputHandler = () => {
     showMemoRequests();
     if (inputValue.length > 0) {
-      saveMyForest();
-      setModalOpen(false);
-      navigate('/');
+      if (!myForestList.some((v) => v.fcNm === fcNm)) {
+        const myForestArry = [
+          ...myForestList,
+          {
+            fcNm: fcNm,
+            fcAddr: fcAddr,
+            ref1: ref1,
+            memo: inputValue,
+          },
+        ];
+        window.localStorage.setItem('myForest', JSON.stringify(myForestArry));
+        setModalOpen(false);
+        navigate('/');
+        setShowSaveMsg(true);
+      } else {
+        setShowExistMsg(true);
+        FeedbackHandler(setShowExistMsg);
+      }
     }
   };
+
+  // const inputHandler = () => {
+  //   showMemoRequests();
+  //   if (inputValue.length > 0) {
+  //     saveMyForest();
+  //     setModalOpen(false);
+  //     navigate('/');
+  //     setShowSaveMsg(true);
+  //   }
+  // };
 
   const deleteMemo = () => {
     const places = JSON.parse(localStorage.getItem('myForest'));
     const filtered = places.filter((v) => v.fcNm !== fcNm);
     localStorage.setItem('myForest', JSON.stringify(filtered));
-    window.location.reload();
+    setShowRemoveMsg(true);
+    setMyForestPlaces(filtered);
+    setModalOpen(false);
   };
 
   const updateMemo = () => {
-    const places = JSON.parse(localStorage.getItem('myForest'));
-    const updated = places.map((place) => {
-      if (place.fcNm === fcNm) {
-        place.memo = inputValue;
-      }
-      return place;
-    });
-    localStorage.setItem('myForest', JSON.stringify(updated));
-    window.location.reload();
+    showMemoRequests();
+    if (inputValue.length > 0) {
+      const places = JSON.parse(localStorage.getItem('myForest'));
+      const updated = places.map((place) => {
+        if (place.fcNm === fcNm) {
+          place.memo = inputValue;
+        }
+        return place;
+      });
+      localStorage.setItem('myForest', JSON.stringify(updated));
+      setMyForestPlaces(updated);
+      setModalOpen(false);
+    }
   };
 
   return (
@@ -109,12 +140,13 @@ const Modal = ({ data, setModalOpen }) => {
                   <UpdateButton onClick={updateMemo}>수정</UpdateButton>
                 </>
               )}
-              {!isMain && <SaveButton onClick={inputHandler}>저장</SaveButton>}
+              {!isMain && <SaveButton onClick={saveMyForest}>저장</SaveButton>}
             </BoxTwo>
           </ModalContents>
           <ModalBackground onClick={closeModal} />
         </>
       </ModalBox>
+      {showExistMsg && <MemoExistMsg />}
     </>
   );
 };

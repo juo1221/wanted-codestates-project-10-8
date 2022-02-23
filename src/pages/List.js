@@ -6,7 +6,7 @@ import Modal from '../components/Modal';
 import ForestCard from '../components/ForestCard';
 import Spinner from '../components/Spinner';
 
-export default function List() {
+export default function List({ setShowSaveMsg }) {
   const URL = '/openapi-json/pubdata/pubMapForest.do';
   const PAGE_NUMBER = 1;
   const [isLoading, setIsLoading] = useState(false);
@@ -54,6 +54,7 @@ export default function List() {
 
   const handleClick = () => {
     navigate('/');
+    setShowSaveMsg(false);
   };
 
   // useEffect(() => {
@@ -88,7 +89,13 @@ export default function List() {
         </ReturnButton>
       </ButtonWrapper>
       <CardListWrapper>{cardList}</CardListWrapper>
-      {modalOpen && <Modal setModalOpen={setModalOpen} data={selectList} />}
+      {modalOpen && (
+        <Modal
+          setModalOpen={setModalOpen}
+          data={selectList}
+          setShowSaveMsg={setShowSaveMsg}
+        />
+      )}
     </>
   );
 }

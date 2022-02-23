@@ -2,26 +2,19 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import BackImg from '../asset/main_bg.png';
 import { useNavigate } from 'react-router-dom';
-
-import {
-  CompleteRemovedMsg,
-  CompleteSavedMsg,
-  MemoRequestMsg,
-} from '../components/Feedback';
+import { CompleteRemovedMsg, CompleteSavedMsg } from '../components/Feedback';
 
 import ForestCard from '../components/ForestCard';
 import Modal from '../components/Modal';
 
-export default function Main() {
+export default function Main({ showSaveMsg }) {
+  const [showRemoveMsg, setShowRemoveMsg] = useState(false);
   const [myForestPlaces, setMyForestPlaces] = useState('');
   const [checkForest, setCheckForest] = useState([]);
   const [filterName, setFilterName] = useState('이름');
   const [showFilterList, setFilterList] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectList, setSelectList] = useState({});
-  const [showFeedbackMemo, setShowFeedbackMemo] = useState(false);
-  const [showFeedbackSave, setShowFeedbackSave] = useState(false);
-  const [showFeedbackRemove, setShowFeedbackRemove] = useState(false);
 
   const keyWordRef = useRef(null);
   const navigate = useNavigate();
@@ -34,12 +27,12 @@ export default function Main() {
     }
   }, []);
 
-  const FeedbackHandler = (setter) => {
-    setter(true);
-    setTimeout(() => {
-      setter(false);
-    }, 1000);
-  };
+  // const FeedbackHandler = (setter) => {
+  //   setter(true);
+  //   setTimeout(() => {
+  //     setter(false);
+  //   }, 1000);
+  // };
 
   const showFilterHandler = () => {
     if (showFilterList) {
@@ -92,12 +85,18 @@ export default function Main() {
               myForestPlaces.map((place, i) => (
                 <>
                   <ForestCard
+                    setSelectList={setSelectList}
                     setModalOpen={setModalOpen}
                     key={i}
                     dataObj={place}
                   />
                   {modalOpen && (
-                    <Modal setModalOpen={setModalOpen} data={place} />
+                    <Modal
+                      setModalOpen={setModalOpen}
+                      data={selectList}
+                      setMyForestPlaces={setMyForestPlaces}
+                      setShowRemoveMsg={setShowRemoveMsg}
+                    />
                   )}
                 </>
               ))}
@@ -107,6 +106,8 @@ export default function Main() {
           </div>
         </div>
       </MainPage>
+      {showSaveMsg && <CompleteSavedMsg />}
+      {showRemoveMsg && <CompleteRemovedMsg />}
     </>
   );
 }

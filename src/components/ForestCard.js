@@ -3,16 +3,16 @@ import styled from 'styled-components';
 
 const ForestCard = React.forwardRef(
   ({ dataObj, setModalOpen, setSelectList }, ref) => {
-    const { fcNm: name, fcAddr: address, ref1: phoneNumber, memo } = dataObj;
+    const { fcNm: fcNm, fcAddr: fcAddr, ref1: ref1, memo } = dataObj;
     const clickHandler = () => {
       setModalOpen(true);
-      setSelectList({ name, address, phoneNumber });
+      setSelectList({ fcNm, fcAddr, ref1, memo });
     };
     return (
       <Card ref={ref} onClick={clickHandler}>
-        <h3>{name}</h3>
-        <div>📍 {address}</div>
-        <div>📞 {phoneNumber}</div>
+        <h3>{fcNm}</h3>
+        <div>📍 {fcAddr}</div>
+        <div>📞 {ref1}</div>
         <div>{memo && memo}</div>
       </Card>
     );
