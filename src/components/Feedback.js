@@ -33,6 +33,38 @@ export function MemoRequestMsg() {
   );
 }
 
+export function MemoExistMsg() {
+  const [opacity, setOpacity] = useState(100);
+
+  useEffect(() => {
+    softRemover();
+  }, [softRemover]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  function softRemover() {
+    if (opacity > 96) {
+      setTimeout(() => {
+        setOpacity(opacity - 1);
+      }, 100);
+    } else if (opacity > 5)
+      setTimeout(() => {
+        setOpacity(opacity - 8);
+      }, 50);
+  }
+  return (
+    <FeedbackContainerStyle //
+      height={'60px'}
+      width={'210px'}
+      fontSize={'18px'}
+      top={'10%'}
+      left={'70%'}
+      opacity={`${opacity}%`}
+    >
+      이미 등록되었습니다.
+    </FeedbackContainerStyle>
+  );
+}
+
 export function CompleteSavedMsg() {
   const [opacity, setOpacity] = useState(100);
 

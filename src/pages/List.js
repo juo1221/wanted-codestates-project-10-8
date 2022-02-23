@@ -54,6 +54,7 @@ export default function List({ setShowSaveMsg }) {
 
   const handleClick = () => {
     navigate('/');
+    setShowSaveMsg(false);
   };
 
   // useEffect(() => {
