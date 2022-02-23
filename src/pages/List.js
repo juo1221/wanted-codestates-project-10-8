@@ -63,10 +63,18 @@ export default function List() {
   });
 
   return (
-    <>
+    <ListWrapper>
       {isLoading && <Spinner />}
       {cardList}
       <Modal />
-    </>
+    </ListWrapper>
   );
 }
+
+const ListWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+`;
