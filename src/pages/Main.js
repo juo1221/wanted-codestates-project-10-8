@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import BackImg from '../asset/main_bg.png';
 
@@ -8,11 +9,63 @@ import {
   MemoRequestMsg,
 } from '../components/Feedback';
 
+import ForestCard from '../components/ForestCard';
+
+const forestInfo = [
+  {
+    id: 1,
+    forestName: '충청도휴양마을',
+    address: '충청도',
+    memo: 'Test메모10',
+    phoneNumber: '012-2334-1232',
+  },
+  {
+    id: 2,
+    forestName: '전라도휴양마을',
+    address: '전라도',
+    memo: 'Test메모20',
+    phoneNumber: '012-2334-1232',
+  },
+  {
+    id: 3,
+    forestName: '강원도휴양마을',
+    address: '강원도',
+    memo: 'Test메모12',
+    phoneNumber: '012-2334-1232',
+  },
+  {
+    id: 4,
+    forestName: '경기도휴양마을',
+    address: '경기도',
+    memo: 'Test메모22',
+    phoneNumber: '012-2334-1232',
+  },
+  {
+    id: 5,
+    forestName: '경사도휴양마을',
+    address: '경상도',
+    memo: 'Test메모13',
+    phoneNumber: '012-2334-1232',
+  },
+  {
+    id: 6,
+    forestName: '제주도휴양마을',
+    address: '제주도',
+    memo: 'Test메모23',
+    phoneNumber: '012-2334-1232',
+  },
+];
+
 export default function Main() {
+  const [myForestPlaces, setMyForestPlaces] = useState(forestInfo);
+  const [filterName, setFilterName] = useState('이름');
+  const [showFilterList, setFilterList] = useState(false);
   const [showFeedbackMemo, setShowFeedbackMemo] = useState(false);
   const [showFeedbackSave, setShowFeedbackSave] = useState(false);
   const [showFeedbackRemove, setShowFeedbackRemove] = useState(false);
 
+
+  const keyWordRef = useRef(null);
   const FeedbackHandler = (setter) => {
     setter(true);
     setTimeout(() => {
@@ -20,23 +73,51 @@ export default function Main() {
     }, 1000);
   };
 
+  const showFilterHandler = () => {
+    if (showFilterList) {
+      setFilterList(false);
+    } else {
+      setFilterList(true);
+    }
+  };
+
+  const onChangeInput = () => {
+    const keyword = filterName === '이름' ? 'forestName' : 'memo';
+    const filteredForest = forestInfo.filter((item) =>
+      item[keyword].includes(keyWordRef.current.value),
+    );
+    setMyForestPlaces(filteredForest);
+  };
+
   return (
     <>
-      <MainPage>
+      <MainPage showFilterList={showFilterList}>
         <div className="main_filter">
-          <div className="filter">
-            <span>이름</span>
+          <div className="filter" onClick={showFilterHandler}>
+            <span>{filterName}</span>
             <span>&#60;</span>
-            <ul className="filter_list">
+            <ul onClick={(e) => setFilterName(e.target.textContent)}>
+
               <li>이름</li>
               <li>메모</li>
             </ul>
           </div>
-          <input type="text" placeholder="검색어를 입력해주세요" />
+          <input
+            type="text"
+            ref={keyWordRef}
+            placeholder="검색어를 입력해주세요"
+            onChange={onChangeInput}
+          />
         </div>
         <div className="main_list">
-          <p>저장된 목록이 없습니다</p>
-          <ul></ul>
+          {!myForestPlaces && <p>저장된 목록이 없습니다</p>}
+          <ul>
+            {myForestPlaces &&
+              myForestPlaces.map((place) => (
+                <ForestCard key={place.id} placeInfo={place} />
+              ))}
+          </ul>
+
           <div>
             <button>&#43;</button>
           </div>
@@ -67,7 +148,7 @@ const MainPage = styled.main`
   height: 844px;
   padding: 30px 0;
   background: url(${BackImg}) center/cover no-repeat;
-
+  overflow: auto;
   .main_filter {
     display: flex;
     justify-content: space-around;
@@ -89,7 +170,8 @@ const MainPage = styled.main`
       color: white;
       box-shadow: 2px 2px 6px 0px gray;
 
-      > ul {
+
+      ul {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -98,23 +180,31 @@ const MainPage = styled.main`
         top: 100%;
         left: 0;
         width: 100%;
+        max-height: ${({ showFilterList }) =>
+        showFilterList ? '200px' : '0px'};
         padding-left: 0;
+        margin-top: 10px;
+
         border-radius: 15px;
         background: transparent;
         box-shadow: 2px 2px 6px 0px gray;
         list-style: none;
 
-        li {
-          width: 100%;
-          padding: 10px 0;
-          border-radius: 15px;
-          text-align: center;
-        }
+        transition: max-height 300ms ease-in;
+        overflow: hidden;
+      }
 
-        li:hover {
-          background-color: #000000;
-          opacity: 10%;
-        }
+      li {
+        width: 100%;
+        height: 100%;
+        padding: 10px 0;
+        border-radius: 15px;
+        text-align: center;
+      }
+
+      li:hover {
+        background-color: #000000;
+        opacity: 10%;
       }
     }
 
@@ -139,8 +229,9 @@ const MainPage = styled.main`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     flex: 1;
+    margin-top: 70px;
+
 
     p {
       color: #ffffff;
@@ -152,6 +243,7 @@ const MainPage = styled.main`
       width: 52px;
       height: 52px;
       line-height: 52px;
+      margin-top: 10px;
       border: transparent;
       border-radius: 15px;
       color: #85f9cf;
