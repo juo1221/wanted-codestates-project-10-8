@@ -1,24 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const ForestCard = (props) => {
-  const { name, address, phoneNumber } = props.placeInfo;
+
+const ForestCard = React.forwardRef(({ dataObj }, ref) => {
+  const { fcNm: name, fcAddr: address, ref1: phoneNumber } = dataObj;
+  return (
+    <Card ref={ref}>
+      <h3>{name}</h3>
+      <div>📍 {address}</div>
+      <div>📞 {phoneNumber}</div>
+    </Card>
   const { setSelectList, setModalOpen } = props;
   const clickHandler = () => {
     setSelectList(props.placeInfo);
     setModalOpen(true);
   };
-
-  return (
-    <>
-      <Card onClick={clickHandler}>
-        <h3>{name}</h3>
-        <div>📍 {address}</div>
-        <div>📞 {phoneNumber}</div>
-      </Card>
-    </>
   );
-};
+});
 
 const Card = styled.article`
   width: 362px;

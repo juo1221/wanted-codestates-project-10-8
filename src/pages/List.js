@@ -1,11 +1,55 @@
 
-import React, { useState } from 'react';
+//list
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import Modal from '../components/Modal';
 import ForestCard from '../components/ForestCard';
+import Spinner from '../components/Spinner';
+import styled from 'styled-components';
 
 export default function List() {
+  const URL = '/openapi-json/pubdata/pubMapForest.do';
+  const PAGE_NUMBER = 1;
+  const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(PAGE_NUMBER);
+  const [forestDataList, setforestDataList] = useState([]);
+  const targetRef = useRef(null);
+  const options = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 1.0,
+  };
+  const idSet = new Set();
+  const loadData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const res = await (
+        await fetch(`${URL}?pageNo=${page}&numOfRows=20`)
+      ).json();
+      const dataArr = JSON.parse(res).response;
+      setforestDataList((prev) => [...prev, ...dataArr]);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    loadData();
+  }, [page]);
+
+  const callback = ([entry], observer) => {
+    if (entry.isIntersecting) setPage(page + 1);
+  };
+  useEffect(() => {
+    if (!targetRef.current) return;
+    const observer = new IntersectionObserver(callback, options);
+    observer.observe(targetRef.current);
+    return () => observer.disconnect();
+  }, [loadData]);
+
   const forestDataList = [
     { id: 1, name: 'a', address: 'sss', phoneNumber: '000' },
     { id: 2, name: 'b', address: 'bbbb', phoneNumber: '001' },
@@ -27,6 +71,25 @@ export default function List() {
   //   observer.current = new IntersectionObserver((entries, options));
   // });
   console.log(selectList);
+  
+  const cardList = forestDataList.map((dataObj, idx) => {
+        if (idSet.has(dataObj.fcNo)) {
+          return '';
+        } else {
+          idSet.add(dataObj.fcNo);
+          return (
+            <ForestCard
+              setSelectList={setSelectList}
+              setModalOpen={setModalOpen}
+              placeInfo={dataObj}
+              key={dataObj.fcNo}
+              dataObj={dataObj}
+              ref={idx + 4 === forestDataList.length ? targetRef : undefined}
+            />
+          );
+        }
+      });
+  
   return (
     <>
       {/* {isLoading && <Spinner />} */}
@@ -36,18 +99,10 @@ export default function List() {
         </ReturnButton>
       </ButtonWrapper>
       <CardListWrapper>
-        {forestDataList.map((data) => (
-
-          <ForestCard
-            setSelectList={setSelectList}
-            setModalOpen={setModalOpen}
-            key={data.id}
-            placeInfo={data}
-          />
-        ))}
+        {cardList}
       </CardListWrapper>
-
       {modalOpen && <Modal setModalOpen={setModalOpen} data={selectList} />}
+
     </>
   );
 }
