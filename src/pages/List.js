@@ -7,6 +7,10 @@ export default function List() {
   const forestDataList = [
     { id: 1, name: 'a', address: 'sss', phoneNumber: '000' },
     { id: 2, name: 'b', address: 'bbbb', phoneNumber: '001' },
+    { id: 3, name: 'b', address: 'cc', phoneNumber: '001' },
+    { id: 4, name: 'b', address: 'dd', phoneNumber: '001' },
+    { id: 5, name: 'c', address: 'dd', phoneNumber: '001' },
+    { id: 6, name: 'd', address: 'dd', phoneNumber: '001' },
   ];
   // useEffect(() => {
   //   observer.current = new IntersectionObserver((entries, options));
@@ -60,7 +64,14 @@ const ReturnButton = styled.button`
 
 const CardListWrapper = styled.section`
   width: 100%;
+  // height: 100vh;
+  overflow: scroll;
   display: flex;
   flex-direction: column;
   align-items: center;
+  // justify-content: space-around;
+
+  & > article {
+    margin: 10px 0;
+  }
 `;
