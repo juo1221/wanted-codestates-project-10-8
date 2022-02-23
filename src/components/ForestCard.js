@@ -8,6 +8,7 @@ const ForestCard = (props) => {
     setSelectList(props.placeInfo);
     setModalOpen(true);
   };
+
   return (
     <>
       <Card onClick={clickHandler}>

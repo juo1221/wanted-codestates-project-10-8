@@ -1,4 +1,6 @@
+
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import Modal from '../components/Modal';
 import ForestCard from '../components/ForestCard';
@@ -12,6 +14,12 @@ export default function List() {
     { id: 5, name: 'c', address: 'dd', phoneNumber: '001' },
     { id: 6, name: 'd', address: 'dd', phoneNumber: '001' },
   ];
+
+  let navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/');
+  };
   const [modalOpen, setModalOpen] = useState(false);
   const [selectList, setSelectList] = useState({});
 
@@ -23,12 +31,13 @@ export default function List() {
     <>
       {/* {isLoading && <Spinner />} */}
       <ButtonWrapper>
-        <ReturnButton>
+        <ReturnButton onClick={handleClick}>
           <span>메인으로</span>
         </ReturnButton>
       </ButtonWrapper>
       <CardListWrapper>
         {forestDataList.map((data) => (
+
           <ForestCard
             setSelectList={setSelectList}
             setModalOpen={setModalOpen}
