@@ -33,9 +33,6 @@ const Modal = ({
       setMyForestList(test);
     }
   }, []);
-  const openModal = () => {
-    // setModalOpen(true);
-  };
   const closeModal = () => {
     setModalOpen(false);
   };
@@ -73,16 +70,6 @@ const Modal = ({
     }
   };
 
-  // const inputHandler = () => {
-  //   showMemoRequests();
-  //   if (inputValue.length > 0) {
-  //     saveMyForest();
-  //     setModalOpen(false);
-  //     navigate('/');
-  //     setShowSaveMsg(true);
-  //   }
-  // };
-
   const deleteMemo = () => {
     const places = JSON.parse(localStorage.getItem('myForest'));
     const filtered = places.filter((v) => v.fcNm !== fcNm);
@@ -112,7 +99,6 @@ const Modal = ({
     <>
       {showMemo && <MemoRequestMsg />}
       <ModalBox>
-        <ModalBtn onClick={openModal}>ModalTest-BTN</ModalBtn>
         <>
           <ModalContents>
             <Box>
@@ -155,16 +141,6 @@ const Modal = ({
 const ModalBox = styled.div`
   width: auto;
   height: auto;
-`;
-
-const ModalBtn = styled.button`
-  width: 220px;
-  height: 50px;
-  color: #fff;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 15px;
-  background-color: #85f9cf;
 `;
 
 const ModalContents = styled.div`

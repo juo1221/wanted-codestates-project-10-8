@@ -59,11 +59,6 @@ export default function List({ setShowSaveMsg }) {
     setShowSaveMsg(false);
   };
 
-  // useEffect(() => {
-  //   observer.current = new IntersectionObserver((entries, options));
-  // });
-  console.log(selectList);
-
   const cardList = forestDataList.map((dataObj, idx) => {
     if (idSet.has(dataObj.fcNo)) {
       return '';
