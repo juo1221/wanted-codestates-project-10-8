@@ -1,4 +1,3 @@
-
 //list
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router';
@@ -6,7 +5,6 @@ import styled from 'styled-components';
 import Modal from '../components/Modal';
 import ForestCard from '../components/ForestCard';
 import Spinner from '../components/Spinner';
-import styled from 'styled-components';
 
 export default function List() {
   const URL = '/openapi-json/pubdata/pubMapForest.do';
@@ -15,12 +13,16 @@ export default function List() {
   const [page, setPage] = useState(PAGE_NUMBER);
   const [forestDataList, setforestDataList] = useState([]);
   const targetRef = useRef(null);
+  const navigate = useNavigate();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectList, setSelectList] = useState({});
+  const idSet = new Set();
   const options = {
     root: null,
     rootMargin: '0px',
     threshold: 1.0,
   };
-  const idSet = new Set();
+
   const loadData = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -50,59 +52,43 @@ export default function List() {
     return () => observer.disconnect();
   }, [loadData]);
 
-  const forestDataList = [
-    { id: 1, name: 'a', address: 'sss', phoneNumber: '000' },
-    { id: 2, name: 'b', address: 'bbbb', phoneNumber: '001' },
-    { id: 3, name: 'b', address: 'cc', phoneNumber: '001' },
-    { id: 4, name: 'b', address: 'dd', phoneNumber: '001' },
-    { id: 5, name: 'c', address: 'dd', phoneNumber: '001' },
-    { id: 6, name: 'd', address: 'dd', phoneNumber: '001' },
-  ];
-
-  let navigate = useNavigate();
-
   const handleClick = () => {
     navigate('/');
   };
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectList, setSelectList] = useState({});
 
   // useEffect(() => {
   //   observer.current = new IntersectionObserver((entries, options));
   // });
   console.log(selectList);
-  
+
   const cardList = forestDataList.map((dataObj, idx) => {
-        if (idSet.has(dataObj.fcNo)) {
-          return '';
-        } else {
-          idSet.add(dataObj.fcNo);
-          return (
-            <ForestCard
-              setSelectList={setSelectList}
-              setModalOpen={setModalOpen}
-              placeInfo={dataObj}
-              key={dataObj.fcNo}
-              dataObj={dataObj}
-              ref={idx + 4 === forestDataList.length ? targetRef : undefined}
-            />
-          );
-        }
-      });
-  
+    if (idSet.has(dataObj.fcNo)) {
+      return '';
+    } else {
+      idSet.add(dataObj.fcNo);
+      return (
+        <ForestCard
+          setSelectList={setSelectList}
+          setModalOpen={setModalOpen}
+          placeInfo={dataObj}
+          key={dataObj.fcNo}
+          dataObj={dataObj}
+          ref={idx + 4 === forestDataList.length ? targetRef : undefined}
+        />
+      );
+    }
+  });
+
   return (
     <>
-      {/* {isLoading && <Spinner />} */}
+      {isLoading && <Spinner />}
       <ButtonWrapper>
         <ReturnButton onClick={handleClick}>
           <span>메인으로</span>
         </ReturnButton>
       </ButtonWrapper>
-      <CardListWrapper>
-        {cardList}
-      </CardListWrapper>
+      <CardListWrapper>{cardList}</CardListWrapper>
       {modalOpen && <Modal setModalOpen={setModalOpen} data={selectList} />}
-
     </>
   );
 }
