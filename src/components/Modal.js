@@ -2,13 +2,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const Modal = (props) => {
-  // 모달 상태관리
   const [modalOpen, setModalOpen] = useState(false);
-  // 오픈 모달
   const openModal = () => {
     setModalOpen(true);
   };
-  // 모달 영역 밖 클릭 시 모달 닫기
   const closeModal = () => {
     setModalOpen(false);
   };
@@ -65,7 +62,7 @@ const ModalBtn = styled.button`
 const ModalContents = styled.div`
   width: 75%;
   height: auto;
-  padding: 15% 8%;
+  padding: 10% 8%;
   overflow: hidden;
   background-color: #fff;
   border-radius: 15px;
