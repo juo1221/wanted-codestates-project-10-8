@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import BackImg from '../asset/main_bg.png';
+import { ReactComponent as Arrow } from '../asset/Arrow.svg';
 import { useNavigate } from 'react-router-dom';
 import { CompleteRemovedMsg, CompleteSavedMsg } from '../components/Feedback';
 
@@ -59,12 +59,14 @@ export default function Main({ showSaveMsg }) {
   };
 
   return (
-    <>
+    <MainContainer>
       <MainPage showFilterList={showFilterList}>
         <div className="main_filter">
           <div className="filter" onClick={showFilterHandler}>
             <span>{filterName}</span>
-            <span>&#62;</span>
+            <span>
+              <Arrow fill="#333" width="12" />
+            </span>
             <ul onClick={(e) => setFilterName(e.target.textContent)}>
               <li>이름</li>
               <li>주소</li>
@@ -106,11 +108,33 @@ export default function Main({ showSaveMsg }) {
           </div>
         </div>
       </MainPage>
+      {/* <ButtonStyle onClick={() => FeedbackHandler(setShowFeedbackMemo)}>
+        memo
+      </ButtonStyle>
+      <ButtonStyle onClick={() => FeedbackHandler(setShowFeedbackSave)}>
+        save
+      </ButtonStyle>
+      <ButtonStyle onClick={() => FeedbackHandler(setShowFeedbackRemove)}>
+        remove
+      </ButtonStyle>
+      {showFeedbackMemo && <MemoRequestMsg />}
+      {showFeedbackSave && <CompleteSavedMsg />}
+      {showFeedbackRemove && <CompleteRemovedMsg />} */}
+    </MainContainer>
       {showSaveMsg && <CompleteSavedMsg />}
       {showRemoveMsg && <CompleteRemovedMsg />}
     </>
   );
 }
+
+const MainContainer = styled.div`
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #efefef;
+`;
 
 const MainPage = styled.main`
   display: flex;
@@ -120,15 +144,18 @@ const MainPage = styled.main`
   width: 390px;
   height: 844px;
   padding: 30px 0;
-  background: url(${BackImg}) center/cover no-repeat;
   overflow: auto;
+  background: #fff;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+
   .main_filter {
     display: flex;
     justify-content: space-around;
     position: relative;
     width: 100%;
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 400;
     cursor: pointer;
     > .filter {
       display: flex;
@@ -139,9 +166,8 @@ const MainPage = styled.main`
       height: 54px;
       border: transparent;
       border-radius: 15px;
-      background: transparent;
-      color: white;
-      box-shadow: 2px 2px 6px 0px gray;
+      background: #fff;
+      box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
 
       ul {
         display: flex;
@@ -157,8 +183,8 @@ const MainPage = styled.main`
         padding-left: 0;
         margin-top: 10px;
         border-radius: 15px;
-        background: rgba(203, 206, 205);
-        box-shadow: 2px 2px 6px 0px gray;
+        background: rgba(255, 255, 255);
+        box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
         list-style: none;
         transition: max-height 300ms ease-in;
         overflow: hidden;
@@ -174,25 +200,24 @@ const MainPage = styled.main`
       }
 
       li:hover {
-        background-color: #000000;
-        opacity: 10%;
+        background: rgba(133, 249, 207);
       }
     }
 
     input {
-      padding: 0 8px;
+      width: 232px;
+      padding: 0 18px;
       border: transparent;
       border-radius: 15px;
-      background-color: transparent;
-      color: #ffffff;
-      font-size: 18px;
-      font-weight: 600;
-      box-shadow: 2px 2px 6px 0px gray;
+      background: rgba(255, 255, 255, 0.2);
+      font-size: 16px;
+      font-weight: 400;
+      box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
       outline: none;
     }
 
     input::placeholder {
-      color: #ffffff;
+      color: #000;
     }
   }
 
@@ -202,7 +227,7 @@ const MainPage = styled.main`
     align-items: center;
     position: relative;
     flex: 1;
-    margin-top: 70px;
+    margin-top: 40px;
 
     p {
       /* color: #ffffff; */
@@ -225,6 +250,9 @@ const MainPage = styled.main`
       font-weight: 600;
       font-size: 50px;
       cursor: pointer;
+    }
+    & > ul > article {
+      margin-bottom: 45px;
     }
   }
 `;
