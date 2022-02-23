@@ -14,6 +14,8 @@ export default function List() {
 
   return (
     <>
+
+     
       {/* {isLoading && <Spinner />} */}
       <CardListWrapper>
         {forestDataList.map((data) => (
@@ -21,6 +23,7 @@ export default function List() {
         ))}
       </CardListWrapper>
       <div>List</div>
+
       <Modal />
     </>
   );
