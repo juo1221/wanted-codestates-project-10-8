@@ -48,14 +48,14 @@ const Modal = ({
   };
   const saveMyForest = () => {
     showMemoRequests();
-    if (!inputValue) {
+    if (inputValue) {
       if (!myForestList.some((v) => v.fcNm === fcNm)) {
         const myForestArry = [
           ...myForestList,
           {
-            fcNm: fcNm,
-            fcAddr: fcAddr,
-            ref1: ref1,
+            fcNm,
+            fcAddr,
+            ref1,
             memo: inputValue,
           },
         ];

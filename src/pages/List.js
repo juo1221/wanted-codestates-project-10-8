@@ -8,7 +8,8 @@ import Spinner from '../components/Spinner';
 import axios from 'axios';
 
 export default function List({ setShowSaveMsg }) {
-  const URL = 'openapi-json/pubdata/pubMapForest.do';
+  const URL =
+    'https://my-proxy-forest.herokuapp.com/https://www.chungbuk.go.kr/openapi-json/pubdata/pubMapForest.do';
   const PAGE_NUMBER = 1;
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(PAGE_NUMBER);
