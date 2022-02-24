@@ -77,24 +77,22 @@ export default function Main({ showSaveMsg }) {
             <ul>
               {myForestPlaces &&
                 myForestPlaces.map((place, i) => (
-                  <>
-                    <ForestCard
-                      setSelectList={setSelectList}
-                      setModalOpen={setModalOpen}
-                      key={i}
-                      dataObj={place}
-                    />
-                    {modalOpen && (
-                      <Modal
-                        setModalOpen={setModalOpen}
-                        data={selectList}
-                        setMyForestPlaces={setMyForestPlaces}
-                        setShowRemoveMsg={setShowRemoveMsg}
-                      />
-                    )}
-                  </>
+                  <ForestCard
+                    key={place.id}
+                    setSelectList={setSelectList}
+                    setModalOpen={setModalOpen}
+                    dataObj={place}
+                  />
                 ))}
             </ul>
+            {modalOpen && (
+              <Modal
+                setModalOpen={setModalOpen}
+                data={selectList}
+                setMyForestPlaces={setMyForestPlaces}
+                setShowRemoveMsg={setShowRemoveMsg}
+              />
+            )}
             <div>
               <AddButton onClick={() => navigate('/list')}>&#43;</AddButton>
             </div>

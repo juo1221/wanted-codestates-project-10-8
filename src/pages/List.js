@@ -47,6 +47,7 @@ export default function List({ setShowSaveMsg }) {
   const callback = ([entry]) => {
     if (entry.isIntersecting) setPage(page + 1);
   };
+
   useEffect(() => {
     if (!targetRef.current) return;
     const observer = new IntersectionObserver(callback, options);

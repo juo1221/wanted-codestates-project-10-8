@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { MemoExistMsg, MemoRequestMsg } from './Feedback';
@@ -17,10 +17,13 @@ const Modal = ({
   const [inputValue, setInputValue] = useState(memo);
   const [myForestList, setMyForestList] = useState([]);
 
+  const inputValueRef = useRef(null);
+  let timeoutRef = useRef('');
+
   const navigate = useNavigate();
   const FeedbackHandler = (setter) => {
     setter(true);
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setter(false);
     }, 1000);
   };
@@ -31,6 +34,10 @@ const Modal = ({
       setMyForestList(test);
     }
   }, []);
+
+
+  const openModal = () => {
+
   const closeModal = () => {
     setModalOpen(false);
   };
@@ -65,6 +72,20 @@ const Modal = ({
         FeedbackHandler(setShowExistMsg);
       }
     }
+    const myForestArry = [
+      ...myForestList,
+      {
+        id: Date.now(),
+        fcNm,
+        fcAddr,
+        ref1,
+        memo: inputValue,
+      },
+    ];
+    window.localStorage.setItem('myForest', JSON.stringify(myForestArry));
+    setModalOpen(false);
+    navigate('/');
+    setShowSaveMsg(true);
   };
 
   const deleteMemo = () => {
@@ -94,7 +115,6 @@ const Modal = ({
 
   return (
     <>
-      {showMemo && <MemoRequestMsg />}
       <ModalBox>
         <>
           <ModalContents>
@@ -113,10 +133,9 @@ const Modal = ({
             <BoxTwo>
               <p className="BoxText">메모</p>
               <MemoInput
-                value={inputValue}
-                onChange={(event) => {
-                  setInputValue(event.target.value);
-                }}
+                ref={inputValueRef}
+                value={inputValue || ''}
+                onChange={(event) => setInputValue(event.target.value)}
               />
               {isMain && (
                 <>
@@ -131,6 +150,7 @@ const Modal = ({
         </>
       </ModalBox>
       {showExistMsg && <MemoExistMsg />}
+      {showMemo && <MemoRequestMsg />}
     </>
   );
 };
