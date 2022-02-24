@@ -5,9 +5,11 @@ import styled from 'styled-components';
 import Modal from '../components/Modal';
 import ForestCard from '../components/ForestCard';
 import Spinner from '../components/Spinner';
+import axios from 'axios';
 
 export default function List({ setShowSaveMsg }) {
-  const URL = '/openapi-json/pubdata/pubMapForest.do';
+  const URL =
+    'https://my-proxy-forest.herokuapp.com/https://www.chungbuk.go.kr/openapi-json/pubdata/pubMapForest.do';
   const PAGE_NUMBER = 1;
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(PAGE_NUMBER);
@@ -27,11 +29,9 @@ export default function List({ setShowSaveMsg }) {
   const loadData = useCallback(async () => {
     try {
       setIsLoading(true);
-      const res = await (
-        await fetch(`${URL}?pageNo=${page}&numOfRows=20`)
-      ).json();
-      const dataArr = JSON.parse(res).response;
-      setforestDataList((prev) => [...prev, ...dataArr]);
+      const { data } = await axios.get(`${URL}?pageNo=${page}&numOfRows=20`);
+      const { response } = await JSON.parse(data);
+      setforestDataList((prev) => [...prev, ...response]);
     } catch (err) {
       console.log(err);
     } finally {
@@ -41,7 +41,7 @@ export default function List({ setShowSaveMsg }) {
 
   useEffect(() => {
     loadData();
-  }, [loadData, page]);
+  }, [loadData]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const callback = ([entry]) => {
@@ -59,11 +59,6 @@ export default function List({ setShowSaveMsg }) {
     navigate('/');
     setShowSaveMsg(false);
   };
-
-  // useEffect(() => {
-  //   observer.current = new IntersectionObserver((entries, options));
-  // });
-  console.log(selectList);
 
   const cardList = forestDataList.map((dataObj, idx) => {
     if (idSet.has(dataObj.fcNo)) {

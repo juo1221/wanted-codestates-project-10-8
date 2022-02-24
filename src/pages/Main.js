@@ -27,13 +27,6 @@ export default function Main({ showSaveMsg }) {
     }
   }, []);
 
-  // const FeedbackHandler = (setter) => {
-  //   setter(true);
-  //   setTimeout(() => {
-  //     setter(false);
-  //   }, 1000);
-  // };
-
   const showFilterHandler = () => {
     if (showFilterList) {
       setFilterList(false);
@@ -50,11 +43,9 @@ export default function Main({ showSaveMsg }) {
         ? 'memo'
         : 'fcAddr';
 
-    console.log(keyWordRef.current.value);
     const filteredForest = checkForest.filter((item) =>
       item[keyword].includes(keyWordRef.current.value),
     );
-    console.log(filteredForest);
     setMyForestPlaces(filteredForest);
   };
 
@@ -103,7 +94,7 @@ export default function Main({ showSaveMsg }) {
               />
             )}
             <div>
-              <button onClick={() => navigate('/list')}>&#43;</button>
+              <AddButton onClick={() => navigate('/list')}>&#43;</AddButton>
             </div>
           </div>
         </MainPage>
@@ -133,7 +124,7 @@ const MainPage = styled.main`
   padding: 30px 0;
   overflow: auto;
   background: #fff;
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
   border-radius: 15px;
 
   .main_filter {
@@ -141,6 +132,7 @@ const MainPage = styled.main`
     justify-content: space-around;
     position: relative;
     width: 100%;
+    padding: 0 1rem;
     font-size: 16px;
     font-weight: 400;
     cursor: pointer;
@@ -154,7 +146,7 @@ const MainPage = styled.main`
       border: transparent;
       border-radius: 15px;
       background: #fff;
-      box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
 
       ul {
         display: flex;
@@ -171,7 +163,7 @@ const MainPage = styled.main`
         margin-top: 10px;
         border-radius: 15px;
         background: rgba(255, 255, 255);
-        box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
         list-style: none;
         transition: max-height 300ms ease-in;
         overflow: hidden;
@@ -199,7 +191,7 @@ const MainPage = styled.main`
       background: rgba(255, 255, 255, 0.2);
       font-size: 16px;
       font-weight: 400;
-      box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
       outline: none;
     }
 
@@ -221,32 +213,32 @@ const MainPage = styled.main`
       font-size: 22px;
       font-weight: 600;
     }
-
-    button {
-      position: fixed;
-      bottom: 20px;
-      right: 30px;
-      width: 52px;
-      height: 52px;
-      line-height: 52px;
-      margin-top: 10px;
-      border: transparent;
-      border-radius: 15px;
-      color: #85f9cf;
-      background-color: #ffffff;
-      font-weight: 600;
-      font-size: 50px;
-      cursor: pointer;
-      bottom: 1%;
-      left: 50%;
-      opacity: 100%;
-      transform: translateX(-50%) translateY(-50%);
-      @media screen and (max-width: 500px) {
-        bottom: 1%;
-      }
-    }
     & > ul > article {
       margin-bottom: 45px;
     }
+  }
+`;
+
+const AddButton = styled.button`
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  width: 52px;
+  height: 52px;
+  line-height: 52px;
+  margin-top: 10px;
+  border: transparent;
+  border-radius: 15px;
+  color: #ffffff;
+  background-color: #85f9cf;
+  font-weight: 600;
+  font-size: 50px;
+  cursor: pointer;
+  bottom: 1%;
+  left: 50%;
+  opacity: 100%;
+  transform: translateX(-50%) translateY(-50%);
+  @media screen and (max-width: 500px) {
+    bottom: 1%;
   }
 `;

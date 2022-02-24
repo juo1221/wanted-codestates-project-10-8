@@ -10,7 +10,6 @@ const Modal = ({
   setShowSaveMsg,
   setShowRemoveMsg,
 }) => {
-  // const [modalOpen, setModalOpen] = useState(false);
   const isMain = window.location.pathname === '/';
   const [showExistMsg, setShowExistMsg] = useState(false);
   const [showMemo, setShowMemo] = useState(false);
@@ -36,33 +35,42 @@ const Modal = ({
     }
   }, []);
 
+
   const openModal = () => {
-    // setModalOpen(true);
-  };
+
   const closeModal = () => {
     setModalOpen(false);
   };
   const showMemoRequests = () => {
     if (showMemo) return;
-    console.log(inputValue, inputValue === undefined);
-    // setShowMemo(true);
-    // setTimeout(() => {
-    //   setShowMemo(false);
-    // }, 1000);
+    if (!inputValue) {
+      setShowMemo(true);
+      setTimeout(() => {
+        setShowMemo(false);
+      }, 1000);
+    }
   };
   const saveMyForest = () => {
-    // showMemoRequests();
-    if (!inputValueRef.current.value) {
-      setShowMemo(true);
-      FeedbackHandler(setShowMemo);
-      clearTimeout(timeoutRef.current);
-      return;
-    }
-    if (myForestList.some((v) => v.fcNm === fcNm)) {
-      setShowExistMsg(true);
-      FeedbackHandler(setShowExistMsg);
-      clearTimeout(timeoutRef.current);
-      return;
+    showMemoRequests();
+    if (inputValue) {
+      if (!myForestList.some((v) => v.fcNm === fcNm)) {
+        const myForestArry = [
+          ...myForestList,
+          {
+            fcNm,
+            fcAddr,
+            ref1,
+            memo: inputValue,
+          },
+        ];
+        window.localStorage.setItem('myForest', JSON.stringify(myForestArry));
+        setModalOpen(false);
+        navigate('/');
+        setShowSaveMsg(true);
+      } else {
+        setShowExistMsg(true);
+        FeedbackHandler(setShowExistMsg);
+      }
     }
     const myForestArry = [
       ...myForestList,
@@ -79,16 +87,6 @@ const Modal = ({
     navigate('/');
     setShowSaveMsg(true);
   };
-
-  // const inputHandler = () => {
-  //   showMemoRequests();
-  //   if (inputValue.length > 0) {
-  //     saveMyForest();
-  //     setModalOpen(false);
-  //     navigate('/');
-  //     setShowSaveMsg(true);
-  //   }
-  // };
 
   const deleteMemo = () => {
     const places = JSON.parse(localStorage.getItem('myForest'));
@@ -160,16 +158,6 @@ const Modal = ({
 const ModalBox = styled.div`
   width: auto;
   height: auto;
-`;
-
-const ModalBtn = styled.button`
-  width: 220px;
-  height: 50px;
-  color: #fff;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 15px;
-  background-color: #85f9cf;
 `;
 
 const ModalContents = styled.div`
